@@ -41,5 +41,9 @@ COPY docker-itop-entrypoint /usr/local/bin/
 ENTRYPOINT ["docker-itop-entrypoint"]
 CMD ["apache2-foreground"]
 
+# Switch to unprivileged Port 8080
+RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf && \
+	sed -i -E 's/VirtualHost (.*):80/VirtualHost \1:8080/' /etc/apache2/sites-available/000-default.conf
+
 ENV DB_HOSTNAME="db" DB_PREFIX=""
 VOLUME ["/var/www/html/conf", "/var/www/html/data", "/var/www/html/env-production", "/var/www/html/log"]
